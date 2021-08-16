@@ -55,7 +55,7 @@ class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IR
         jdbcTemplate.update(QUERY_SAVE, params) > 0
     } catch (e: Exception) {
         print(e.message)
-        throw InternalError("ERROR Finding BY ID")
+        throw InternalError("ERROR SAVING")
     }
 
     override fun update(t: Owner): Owner {
@@ -70,7 +70,7 @@ class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IR
             return t
         } catch (e: Exception) {
             print(e.message)
-            throw InternalError("ERROR Finding BY ID")
+            throw InternalError("ERROR UPDATING")
         }
     }
 
@@ -80,6 +80,6 @@ class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IR
 
     } catch (e: Exception) {
         print(e.message)
-        throw InternalError("ERROR Finding BY ID")
+        throw InternalError("ERROR DELETING BY ID")
     }
 }
