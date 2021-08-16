@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
 
-class ProductMapper : RowMapper<Product> {
+class ProductRowMapper : RowMapper<Product> {
 
     override fun mapRow(rs: ResultSet, rowNum: Int): Product {
         return Product(

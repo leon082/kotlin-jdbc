@@ -1,7 +1,7 @@
 package com.example.kotlin.Product.dao.repository.impl
 
 import com.example.kotlin.Product.dao.model.Owner
-import com.example.kotlin.Product.dao.model.mapper.OwnerMapper
+import com.example.kotlin.Product.dao.model.mapper.OwnerRowMapper
 import com.example.kotlin.Product.dao.repository.IRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -21,35 +21,65 @@ class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IR
     @Value("\${owner.find-by-id}")
     lateinit var QUERY_FIND_BY_ID: String
 
+    @Value("\${owner.save}")
+    lateinit var QUERY_SAVE: String
 
-    override fun findAll(): List<Owner> {
-        return try {
-            jdbcTemplate.query(QUERY_FINDALL, OwnerMapper())
-        } catch (e: Exception) {
-            print(e.message)
-            throw InternalError("ERROR Finding ALL")
-        }
-    }
+    @Value("\${owner.update}")
+    lateinit var QUERY_UPDATE: String
+
+    @Value("\${owner.delete}")
+    lateinit var QUERY_DELET: String
 
 
-    override fun findById(id: Number): Owner {
-     return try {
-         jdbcTemplate.query(QUERY_FIND_BY_ID, MapSqlParameterSource().addValue("id", id), OwnerMapper()).first()
-     } catch (e: Exception) {
+    override fun findAll(): List<Owner> = try {
+        jdbcTemplate.query(QUERY_FINDALL, OwnerRowMapper())
+    } catch (e: Exception) {
         print(e.message)
-         throw InternalError("ERROR Finding BY ID")
-     }
+        throw InternalError("ERROR Finding ALL")
     }
 
-    override fun save(t: Owner): Owner {
-        TODO("Not yet implemented")
+
+    override fun findById(id: Number): Owner = try {
+        jdbcTemplate.query(QUERY_FIND_BY_ID, MapSqlParameterSource().addValue("id", id), OwnerRowMapper()).first()
+    } catch (e: Exception) {
+        print(e.message)
+        throw InternalError("ERROR Finding BY ID")
+    }
+
+    override fun save(t: Owner): Boolean = try {
+        val params = MapSqlParameterSource()
+        params.addValue("name", t.name)
+        params.addValue("age", t.age)
+        params.addValue("contactNumber", t.contactNumber)
+
+        jdbcTemplate.update(QUERY_SAVE, params) > 0
+    } catch (e: Exception) {
+        print(e.message)
+        throw InternalError("ERROR Finding BY ID")
     }
 
     override fun update(t: Owner): Owner {
-        TODO("Not yet implemented")
+        return try {
+            val params = MapSqlParameterSource()
+            params.addValue("name", t.name)
+            params.addValue("age", t.age)
+            params.addValue("contactNumber", t.contactNumber)
+            params.addValue("id", t.id)
+
+            jdbcTemplate.update(QUERY_UPDATE, params)
+            return t
+        } catch (e: Exception) {
+            print(e.message)
+            throw InternalError("ERROR Finding BY ID")
+        }
     }
 
-    override fun delete(id: Number): Boolean {
-        TODO("Not yet implemented")
+    override fun delete(id: Number): Boolean = try {
+
+        jdbcTemplate.update(QUERY_DELET, MapSqlParameterSource().addValue("id", id)) > 0
+
+    } catch (e: Exception) {
+        print(e.message)
+        throw InternalError("ERROR Finding BY ID")
     }
 }
