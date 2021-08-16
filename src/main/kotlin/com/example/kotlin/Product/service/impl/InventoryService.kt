@@ -6,18 +6,18 @@ import com.example.kotlin.Product.dto.InventoryDTO
 import com.example.kotlin.Product.dto.OwnerDTO
 import com.example.kotlin.Product.dto.ProductDTO
 import com.example.kotlin.Product.mapper.ProductMapper
-import com.example.kotlin.Product.service.IInventory
+import com.example.kotlin.Product.service.IInventoryService
 import com.example.kotlin.Product.service.IService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 @Service
-class InventoryImpl(
+class InventoryService(
     @Autowired @Qualifier("ownerService") private val ownerService: IService<OwnerDTO>,
     @Autowired private val inventoryRepository: IInventoryRepository,
     private val productMapper: ProductMapper
-) : IInventory {
+) : IInventoryService {
 
     override fun getInventory(id: Number): InventoryDTO =
         ownerService.findById(id).let {

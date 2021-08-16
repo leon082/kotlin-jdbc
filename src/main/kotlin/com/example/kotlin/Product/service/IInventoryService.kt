@@ -2,6 +2,6 @@ package com.example.kotlin.Product.service
 
 import com.example.kotlin.Product.dto.InventoryDTO
 
-interface IInventory {
+interface IInventoryService {
     fun getInventory(owner: Number): InventoryDTO
 }
