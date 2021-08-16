@@ -13,10 +13,4 @@ fun main(args: Array<String>) {
 	runApplication<ProductApplication>(*args)
 }
 
-@RestController
-@RequestMapping("/api")
-class HelloController{
-	@GetMapping
-	fun hello() = "Hello World !!"
 
-}
