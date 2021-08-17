@@ -17,19 +17,19 @@ import org.springframework.stereotype.Repository
 class ProductRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IRepository<Product> {
 
     @Value("\${product.find-all}")
-    lateinit var QUERY_FINDALL: String
+    var QUERY_FINDALL: String = ""
 
     @Value("\${product.find-by-id}")
-    lateinit var QUERY_FIND_BY_ID: String
+    var QUERY_FIND_BY_ID: String = ""
 
     @Value("\${product.save}")
-    lateinit var QUERY_SAVE: String
+    var QUERY_SAVE: String = ""
 
     @Value("\${product.update}")
-    lateinit var QUERY_UPDATE: String
+    var QUERY_UPDATE: String = ""
 
     @Value("\${product.delete}")
-    lateinit var QUERY_DELET: String
+    var QUERY_DELET: String = ""
 
 
     override fun findAll(): List<Product> = try {

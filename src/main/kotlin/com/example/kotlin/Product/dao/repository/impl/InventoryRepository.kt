@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository
 class InventoryRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IInventoryRepository {
 
     @Value("\${inventory.find-inventory}")
-    lateinit var QUERY_FIND_INVENTORY: String
+    var QUERY_FIND_INVENTORY: String = ""
 
     override fun findInventory(id: Number): List<Product> = try {
         jdbcTemplate.query(QUERY_FIND_INVENTORY, MapSqlParameterSource().addValue("owner", id), ProductRowMapper())

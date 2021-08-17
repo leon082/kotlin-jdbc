@@ -16,19 +16,19 @@ import org.springframework.stereotype.Repository
 class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IRepository<Owner> {
 
     @Value("\${owner.find-all}")
-    lateinit var QUERY_FINDALL: String
+    var QUERY_FINDALL: String = ""
 
     @Value("\${owner.find-by-id}")
-    lateinit var QUERY_FIND_BY_ID: String
+    var QUERY_FIND_BY_ID: String = ""
 
     @Value("\${owner.save}")
-    lateinit var QUERY_SAVE: String
+    var QUERY_SAVE: String = ""
 
     @Value("\${owner.update}")
-    lateinit var QUERY_UPDATE: String
+    var QUERY_UPDATE: String = ""
 
     @Value("\${owner.delete}")
-    lateinit var QUERY_DELET: String
+    var QUERY_DELET: String = ""
 
 
     override fun findAll(): List<Owner> = try {
