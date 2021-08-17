@@ -1,8 +1,6 @@
 package com.example.kotlin.Product.controller
 
-import com.example.kotlin.Product.controller.v1.InventoryController
 import com.example.kotlin.Product.controller.v1.OwnerController
-import com.example.kotlin.Product.service.impl.InventoryService
 import com.example.kotlin.Product.service.impl.OwnerService
 import com.example.kotlin.Product.utils.BuildObject
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -17,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import java.lang.Exception
 
 class OwnerControllerSpec : FunSpec() {
 
@@ -44,6 +41,18 @@ class OwnerControllerSpec : FunSpec() {
 
             mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/v1/owner")
+                    .content(buildObject.aValidJsonOwnerDTO())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+
+            ).andExpect(MockMvcResultMatchers.status().isOk)
+        }
+
+        test("Update Inventory successful") {
+            every { service.update(any()) } returns buildObject.aValidOwnerDTO()
+
+            mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/v1/owner")
                     .content(buildObject.aValidJsonOwnerDTO())
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)

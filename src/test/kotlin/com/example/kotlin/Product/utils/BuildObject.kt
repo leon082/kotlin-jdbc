@@ -14,7 +14,8 @@ class BuildObject {
     fun aValidOwnerDTO(): OwnerDTO = OwnerDTO(1, "iPhone", "27", "3162875498")
     fun aValidInventoryDTO(): InventoryDTO = InventoryDTO(this.aValidOwnerDTO(), listOf(this.aValidProductDTO()))
     fun aValidJsonOwnerDTO(): String {
-        return """{                   
+        return """{  
+                    "id": 1,
                     "name": "Jairo",
                     "age" : "21",
                     "contact_number": "3136631528"}
