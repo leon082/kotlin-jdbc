@@ -5,6 +5,7 @@ import com.example.kotlin.Product.dao.repository.IInventoryRepository
 import com.example.kotlin.Product.dto.InventoryDTO
 import com.example.kotlin.Product.dto.OwnerDTO
 import com.example.kotlin.Product.dto.ProductDTO
+import com.example.kotlin.Product.exception.GenericError
 import com.example.kotlin.Product.mapper.ProductMapper
 import com.example.kotlin.Product.service.IInventoryService
 import com.example.kotlin.Product.service.IService
@@ -21,6 +22,7 @@ class InventoryService(
 
     override fun getInventory(id: Number): InventoryDTO =
         ownerService.findById(id).let {
+            if(it==null) throw GenericError("404","Owner NOT found")
             this.buildInventoryDTO(it)
         }
 

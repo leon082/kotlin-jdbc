@@ -3,9 +3,11 @@ package com.example.kotlin.Product.dao.repository.impl
 import com.example.kotlin.Product.dao.model.Owner
 import com.example.kotlin.Product.dao.model.mapper.OwnerRowMapper
 import com.example.kotlin.Product.dao.repository.IRepository
+import com.example.kotlin.Product.exception.GenericError
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
+import org.springframework.dao.DataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -33,17 +35,23 @@ class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IR
 
     override fun findAll(): List<Owner> = try {
         jdbcTemplate.query(QUERY_FINDALL, OwnerRowMapper())
-    } catch (e: Exception) {
-        print(e.message)
-        throw InternalError("ERROR Finding ALL")
+    } catch (e: DataAccessException) {
+        throw GenericError("400","ERROR FINDING ALL")
+    }catch(e: Exception){
+        throw Exception("ERROR FINDING ALL")
     }
 
 
     override fun findById(id: Number): Owner = try {
         jdbcTemplate.query(QUERY_FIND_BY_ID, MapSqlParameterSource().addValue("id", id), OwnerRowMapper()).first()
-    } catch (e: Exception) {
-        print(e.message)
-        throw InternalError("ERROR Finding BY ID")
+    } catch (e: DataAccessException) {
+        throw GenericError("404","ERROR, ID NOT VALID")
+    }catch (e: NoSuchElementException) {
+        print("NoSuchElementException...")
+        throw GenericError("404","ERROR, ID NOT VALID")
+    }catch(e: Exception){
+        print(e)
+        throw Exception("ERROR FINDING BY ID")
     }
 
     override fun save(t: Owner): Boolean = try {
@@ -55,7 +63,7 @@ class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IR
         jdbcTemplate.update(QUERY_SAVE, params) > 0
     } catch (e: Exception) {
         print(e.message)
-        throw InternalError("ERROR SAVING")
+        throw Exception("ERROR SAVING")
     }
 
     override fun update(t: Owner): Owner {
@@ -70,7 +78,7 @@ class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IR
             return t
         } catch (e: Exception) {
             print(e.message)
-            throw InternalError("ERROR UPDATING")
+            throw Exception("ERROR UPDATING")
         }
     }
 
@@ -80,6 +88,6 @@ class OwnerRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : IR
 
     } catch (e: Exception) {
         print(e.message)
-        throw InternalError("ERROR DELETING BY ID")
+        throw Exception("ERROR DELETING BY ID")
     }
 }

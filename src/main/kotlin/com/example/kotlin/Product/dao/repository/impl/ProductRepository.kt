@@ -4,9 +4,11 @@ package com.example.kotlin.Product.dao.repository.impl
 import com.example.kotlin.Product.dao.model.Product
 import com.example.kotlin.Product.dao.model.mapper.ProductRowMapper
 import com.example.kotlin.Product.dao.repository.IRepository
+import com.example.kotlin.Product.exception.GenericError
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
+import org.springframework.dao.DataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -34,17 +36,21 @@ class ProductRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : 
 
     override fun findAll(): List<Product> = try {
         jdbcTemplate.query(QUERY_FINDALL, ProductRowMapper())
-    } catch (e: Exception) {
-        print(e.message)
-        throw InternalError("ERROR Finding ALL")
+    } catch (e: DataAccessException) {
+        throw GenericError("404","ERROR Finding ALL")
+    }catch(e: Exception){
+        throw Exception("ERROR FINDING ALL")
     }
 
 
     override fun findById(id: Number): Product = try {
         jdbcTemplate.query(QUERY_FIND_BY_ID, MapSqlParameterSource().addValue("id", id), ProductRowMapper()).first()
-    } catch (e: Exception) {
-        print(e.message)
-        throw InternalError("ERROR Finding BY ID")
+    } catch (e: DataAccessException) {
+        throw GenericError("404","ERROR , ID NOT VALID")
+    }catch (e: NoSuchElementException) {
+        throw GenericError("404","ERROR, ID NOT VALID")
+    }catch(e: Exception){
+        throw Exception("ERROR FINDING BY ID")
     }
 
     override fun save(t: Product): Boolean = try {
